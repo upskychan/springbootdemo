@@ -8,9 +8,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
+@EnableScheduling  //定时任务
 //@MapperScan("com.upsky.springboot.mapper") // 添加mybatis注解包扫描
 @EnableTransactionManagement // 开启事务支持
 @ServletComponentScan(basePackages = {"com.upsky.springboot.servlet","com.upsky.springboot.filter"})

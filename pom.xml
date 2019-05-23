@@ -6,7 +6,8 @@
     <groupId>com.upsky</groupId>
     <artifactId>springbootdemo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <!--<packaging>jar</packaging>-->
+    <packaging>war</packaging>
 
     <name>springbootdemo</name>
     <description>Demo project for Spring Boot</description>
@@ -31,6 +32,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!--如果打war包在tomcat下部署，需要过滤掉自带的tomcat插件
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>-->
         </dependency>
         <!--测试的起步依赖-->
         <dependency>
@@ -99,9 +107,31 @@
     <build>
         <plugins>
             <!-- springboot提供的一个编译打包的插件 -->
+            <!--构建可执行的jar或者war包-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!--构建普通非springboot的jar包-->
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>notboot</classifier>
+                            <!-- Need this to ensure application.yml is excluded -->
+                            <forceCreation>true</forceCreation>
+                            <excludes>
+                                <exclude>**/SpringbootdemoApplication.class</exclude>
+                                <exclude>**/WarStartApplication.class</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <!--mybatis代码自动生成插件-->
             <plugin>

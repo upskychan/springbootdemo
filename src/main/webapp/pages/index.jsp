@@ -5,7 +5,7 @@
     <title>Index Jsp 页面</title>
 </head>
 <body>
-index.jsp<<br>
+index.jsp<br>
 pageContext.request.contextPath:${pageContext.request.contextPath}
 <br>
 ${msg}

@@ -23,7 +23,7 @@ public class QuartzService {
     /**
      * fixedRate:上一次 启动时间点之后 X秒执行一次.
      */
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 5000)//单位ms
     public void timerToZZP(){
         System.out.println("ZZP:" + new Random().nextLong() + new SimpleDateFormat("HH:mm:ss").format(new Date()));
     }
@@ -31,7 +31,7 @@ public class QuartzService {
     /**
      * fixedDelay:上一次 结束时间点之后 每X秒执行一次.
      */
-    @Scheduled(fixedDelay = 50000)
+    @Scheduled(fixedDelay = 50000)//单位ms
     public void timerToReportCount(){
         for (int i = 0; i < 10; i++){
             System.out.println("<================its" + i + "count===============>" + new SimpleDateFormat("HH:mm:ss").format(new Date()));
@@ -41,7 +41,7 @@ public class QuartzService {
     /**
      * initialDelay+fixedRate:第一次延迟 X秒执行，之后按照fixedRate的规则每X秒执行.
      */
-    @Scheduled(initialDelay = 50000,fixedRate = 6000)
+    @Scheduled(initialDelay = 50000,fixedRate = 6000)//单位ms
     public void timerToReport(){
         for (int i = 0; i < 10; i++){
             System.out.println("<================delay :" + i + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "count===============>");

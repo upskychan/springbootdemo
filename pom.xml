@@ -7,7 +7,8 @@
     <artifactId>springbootdemo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <!--<packaging>jar</packaging>-->
-    <packaging>war</packaging>
+    <!--<packaging>war</packaging>-->
+    <packaging>${project.packaging}</packaging>
 
     <name>springbootdemo</name>
     <description>Demo project for Spring Boot</description>
@@ -106,33 +107,31 @@
 
     <build>
         <plugins>
-            <!-- springboot提供的一个编译打包的插件 -->
             <!--构建可执行的jar或者war包-->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.springframework.boot</groupId>-->
+                <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+            <!--</plugin>-->
             <!--构建普通非springboot的jar包-->
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <classifier>notboot</classifier>
-                            <!-- Need this to ensure application.yml is excluded -->
-                            <forceCreation>true</forceCreation>
-                            <excludes>
-                                <exclude>**/SpringbootdemoApplication.class</exclude>
-                                <exclude>**/WarStartApplication.class</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+                <!--<artifactId>maven-jar-plugin</artifactId>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>jar</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<classifier>notboot</classifier>-->
+                            <!--<forceCreation>true</forceCreation>-->
+                            <!--<excludes>-->
+                                <!--<exclude>**/SpringbootdemoApplication.class</exclude>-->
+                                <!--<exclude>**/WarStartApplication.class</exclude>-->
+                            <!--</excludes>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
             <!--mybatis代码自动生成插件-->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
@@ -180,5 +179,77 @@
         </resources>
     </build>
 
+    <profiles>
+        <!--构建springboot的jar包（默认）-->
+        <!--mvn clean package -Pjar-springboot -Dmaven.test.skip=true-->
+        <profile>
+            <id>jar-springboot</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <project.packaging>jar</project.packaging>
+            </properties>
+            <build>
+                <plugins>
+                    <!-- springboot提供的一个编译打包的插件 -->
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!--构建普通的jar包-->
+        <!--mvn clean package -Pjar -Dmaven.test.skip=true-->
+        <profile>
+            <id>jar</id>
+            <properties>
+                <project.packaging>jar</project.packaging>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <configuration>
+                            <classifier>thin</classifier>
+                            <excludes>
+                                <exclude>**/SpringbootdemoApplication.class</exclude>
+                                <exclude>**/WarStartApplication.class</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!--构建war包-->
+        <!--mvn clean package -Pwar -Dmaven.test.skip=true-->
+        <profile>
+            <id>war</id>
+            <properties>
+                <project.packaging>war</project.packaging>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <packagingExcludes>
+                                <!--spring-boot-starter-jetty引入的jar包全部排除-->
+                                WEB-INF/lib/*jetty*.jar,
+                                WEB-INF/lib/*websocket*.jar,
+                                WEB-INF/lib/*asm-commons*.jar,
+                                WEB-INF/lib/*asm-tree*.jar,
+                                WEB-INF/lib/*asm-analysis*.jar,
+                                WEB-INF/lib/*apache-el*.jar
+                            </packagingExcludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
